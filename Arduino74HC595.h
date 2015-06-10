@@ -34,7 +34,7 @@ class Arduino74HC595
     This function sets all the pins to values corresponding to the binary representation of A number.
     For example setValues(B10000001) will activate the first and last pin.
     */
-    //void setValues(int values);//TODO: implement this function
+    void setValues(uint8_t values);//TODO: implement this function
     
     //void setValues();
   private:
@@ -42,7 +42,7 @@ class Arduino74HC595
     int _DS_pin;
     int _STCP_pin;
     int _SHCP_pin;
-    boolean _values[8]{};
+    uint8_t _values;
     void _writereg();
 };
 

@@ -21,33 +21,47 @@
     
     Arduino74HC595::~Arduino74HC595()
     {
-        delete [] _values;
     }
 
     void
     Arduino74HC595::setValue(int pinNumber, boolean value)
     {
-      _values[pinNumber] = value;
+      if(pinNumber)
+      {
+        _values |= (1 << pinNumber);
+      }else
+      {
+        _values &= !(1 << pinNumber);
+      }
       _writereg();
     }
 
     void
     Arduino74HC595::setValues(boolean* values)
     {
-      memcpy(_values,values,_nbOutputs*sizeof(boolean));
+      _values = 0;
+      for(int i = 0; i < ARDUINO74HC595_NBPINS; i++)
+      {
+        _values += (values[i] << i);
+      }
       _writereg();
     }
 
     void
-    Arduino74HC595::_writereg()// code from http://staticjolt.com/shift-registers-arduino-tutorial/
+    Arduino74HC595::setValues(uint8_t values)
     {
+      _values = values;
+      _writereg();
+    }
+
+    void
+    Arduino74HC595::_writereg()
+    {
+
       digitalWrite(_STCP_pin, LOW);
-      for (int i = _nbOutputs-1; i>=0; i--)
-      {
-        digitalWrite(_SHCP_pin, LOW);
-        digitalWrite(_DS_pin, _values[i] );
-        digitalWrite(_SHCP_pin, HIGH);
-      }
+
+      shiftOut(_DS_pin, _SHCP_pin, MSBFIRST, _values); 
+      
       digitalWrite(_STCP_pin, HIGH);
     }
 
