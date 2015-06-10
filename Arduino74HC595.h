@@ -38,7 +38,6 @@ class Arduino74HC595
     
     //void setValues();
   private:
-    int _nbOutputs;
     int _DS_pin;
     int _STCP_pin;
     int _SHCP_pin;
